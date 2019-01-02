@@ -35,17 +35,6 @@
           <!-- <a href="#"><i class="fa fa-circle text-success"></i> Online</a> -->
         </div>
       </div>
-      <!-- search form (Optional) -->
-      <!-- <form action="#" method="get" class="sidebar-form">
-        <div class="input-group">
-          <input type="text" name="q" class="form-control" placeholder="Search...">
-          <span class="input-group-btn">
-              <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
-              </button>
-            </span>
-        </div>
-      </form> -->
-      <!-- /.search form -->
       <!-- Sidebar Menu -->
       <ul class="sidebar-menu" data-widget="tree">
         <li class="header">Menu</li>
@@ -57,12 +46,12 @@
               </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="#">Definir Puerto</a></li>
-            <li><a href="#">Definir Empresa</a></li>
+            <li><router-link to="/puerto">Puerto</router-link></li>
+            <li><router-link to="/empresa">Empresa</router-link></li>
           </ul>
         </li>
-        <li class="active"><a href="#"><i class="fa fa-link"></i> <span>Postulante</span></a></li>
-        <li><a href="#"><i class="fa fa-link"></i> <span>Examen</span></a></li>
+        <li class="active"><a href="#"><i class="fa fa-link"></i> <span><router-link to="/postulante">Postulante</router-link></span></a></li>
+        <li><a href="#"><i class="fa fa-link"></i> <span><router-link to="/examen">Examen</router-link></span></a></li>
       </ul>
       <!-- /.sidebar-menu -->
     </section>
@@ -73,20 +62,16 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Page Header
-        <small>Optional description</small>
+       Panel Principal
+        <small>sistema de gestion de pacientes.</small>
       </h1>
-      <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> Level</a></li>
-        <li class="active">Here</li>
-      </ol>
     </section>
     <!-- Main content -->
-    <section class="content container-fluid">+++
+    <section class="content container-fluid">
       <!--------------------------
         | Your Page Content Here |
         -------------------------->
-        <div>Soy el bien</div>
+        <router-view/>
     </section>
     <!-- /.content -->
   </div>
