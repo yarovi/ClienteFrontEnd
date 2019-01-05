@@ -12,7 +12,7 @@
           <div class="box-body">
             <div class="form-group">
               <label for="Nombre Dispositivo">Codigo</label>
-              <input type="text" class="form-control" id="fieldid" disabled value="0" v-model="dispositivo.fieldid">
+              <input type="text" class="form-control" id="fieldid"  v-model="dispositivo.fieldid" disabled>
             </div>
             <div class="form-group">
               <label for="Nombre Dispositivo">Descripcion</label>
@@ -53,7 +53,7 @@ export default {
     return {
       id: this.$route.params.id,
       dispositivo: {
-        fieldid: '',
+        fieldid: '0',
         fielddescripcion: '',
         fieldpuerto: '',
         fieldestado: ''
@@ -62,29 +62,49 @@ export default {
   },
   methods: {
     dispositivocreate () {
-      axios.post('http://localhost:8090/dispositivo/create',
-        { id: this.dispositivo.fieldid,
-          descripcion: this.dispositivo.fielddescripcion,
-          puerto: this.dispositivo.fieldpuerto,
-          estado: this.dispositivo.fieldestado})
-        .then(response => {
-          console.log(response.data)
-        })
-        .catch(error => {
-          console.log(error)
-        })
+      console.log('dato..... ' + this.dispositivo.fieldid)
+      if (this.dispositivo.fieldid > 0) {
+        console.log('llamando para actualizar..... x)')
+        this.dispositivoupdate()
+      } else {
+        axios.post('http://localhost:8090/dispositivo/create',
+          {id: this.dispositivo.fieldid,
+            descripcion: this.dispositivo.fielddescripcion,
+            puerto: this.dispositivo.fieldpuerto,
+            estado: this.dispositivo.fieldestado})
+          .then(response => {
+            console.log(response.data)
+          })
+          .catch(error => {
+            console.log(error)
+          })
+      }
     },
     dispositivogetxid () {
       axios.get('http://localhost:8090/dispositivo/getid/' + this.id)
         .then(response => {
           console.log(response.data)
-          this.dispositivo = response.data
+          this.dispositivo.fieldid = response.data.id
+          this.dispositivo.fielddescripcion = response.data.descripcion
+          this.dispositivo.fieldpuerto = response.data.puerto
         })
         .catch(error => {
           console.log(error)
         })
     },
     dispositivoupdate () {
+      axios.put('http://localhost:8090/dispositivo/update/' + this.id,
+        { id: this.dispositivo.fieldid,
+          descripcion: this.dispositivo.fielddescripcion,
+          puerto: this.dispositivo.fieldpuerto,
+          estado: this.dispositivo.fieldestado})
+        .then(response => {
+          console.log(response.data)
+          this.$router.push('/puerto')
+        })
+        .catch(error => {
+          console.log(error)
+        })
     }
   },
   created: function () {
