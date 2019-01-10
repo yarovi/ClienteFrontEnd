@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col-xs-12">
         <router-link to="/crearpuerto" class="btn btn-block btn-success">Crear Dispositivo</router-link>
-        <button v-on:click="getall()">pinchame</button>
+        <!-- <button v-on:click="getall()">pinchame</button> -->
       </div>
     </div>
     <div class="row">
@@ -96,29 +96,26 @@
                     class="dataTables_info"
                     id="example2_info"
                     role="status"
-                    aria-live="polite"
-                  >Showing 1 to 10 of 57 entries</div>
+                    aria-live="polite">Total: {{currentPage}}</div>
                 </div>
                 <div class="col-sm-7">
-                  <div class="dataTables_paginate paging_simple_numbers" id="example2_paginate">
+                  <nav>
                     <ul class="pagination">
-                      <li class="paginate_button previous disabled" id="example2_previous">
-                        <a href="#" aria-controls="example2" data-dt-idx="0" tabindex="0">Atras</a>
+                      <li v-if="pagination.number>0">
+                        <a href="#" @click.prevent="changePage(pagination.number -1)">
+                          <span>Atras</span></a>
                       </li>
-                      <li class="paginate_button active">
-                        <a href="#" aria-controls="example2" data-dt-idx="1" tabindex="0">1</a>
+                      <li v-for="(page,index) in pagesNumber" v-bind:key="index" v-bind:class="[page == isActived? 'active' :'']" >
+                        <a href="#" @click.prevent="changePage(page)">
+                          {{ page }}
+                        </a>
                       </li>
-                      <li class="paginate_button">
-                        <a href="#" aria-controls="example2" data-dt-idx="2" tabindex="0">2</a>
-                      </li>
-                      <li class="paginate_button">
-                        <a href="#" aria-controls="example2" data-dt-idx="3" tabindex="0">3</a>
-                      </li>
-                      <li class="paginate_button next" id="example2_next">
-                        <a href="#" aria-controls="example2" data-dt-idx="7" tabindex="0">Siguiente</a>
-                      </li>
+                      <li v-if="pagination.number < pagination.totalPages-1 ">
+                        <a href="#" @click.prevent="changePage(pagination.number +1)">
+                          <span>Siguiente</span></a>
+                        </li>
                     </ul>
-                  </div>
+                  </nav>
                 </div>
               </div>
             </div>
@@ -134,24 +131,66 @@ export default ({
   data: function () {
     return {
       stdata: [],
-      currentPage: 4
+      currentPage: 4,
+      pagination: [],
+      offset: 1
     }
   },
   ready: function () {
     console.log('cargando .....')
   },
+  computed: {
+    isActived: function () {
+      return this.pagination.number
+    },
+    pagesNumber: function () {
+      if (this.pagination.size > this.pagination.numberOfElements) {
+        return []
+      }
+      var from = this.pagination.number - this.offset
+      if (from < 1) {
+        from = 1
+      }
+      var to = from + (this.offset * this.offset)
+      if (to >= this.pagination.totalPages) {
+        to = this.pagination.totalPages
+      }
+      var pagesArray = []
+      while (from <= to) {
+        pagesArray.push(from)
+        from++
+      }
+      return pagesArray
+    }
+  },
   methods: {
-    getall () {
-      axios.get('http://localhost:8090/dispositivo/all')
+    getall (page) {
+      // axios.get('http://localhost:8090/dispositivo/all')
+      axios.get('http://localhost:8090/dispositivo/findget?page=' + page)
         .then(response => {
-          this.stdata = response.data
-          console.log(response.data)
+          this.stdata = response.data.content
+          this.pagination = {
+            totalPages: response.data.totalPages,
+            totalElements: response.data.totalElements,
+            last: response.data.last,
+            numberOfElements: response.data.numberOfElements,
+            first: response.data.first,
+            sort: response.data.sort,
+            size: response.data.size,
+            number: response.data.number
+          }
+          console.log(response.data.content)
+          console.log(this.pagination)
         })
         .catch(error => {
           console.log(error)
         })
+    },
+    changePage: function (page) {
+      this.pagination.number = page
+      this.getall(page)
     }},
   created: function () {
-    this.getall()
+    this.getall(0)
   }})
 </script>
