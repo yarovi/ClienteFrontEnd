@@ -81,8 +81,8 @@
                           <!-- <a class="btn btn-primary" href="#">     </a>                        -->
                           <router-link v-bind:to="'/crearpuerto/'+item.id" class="far fa-edit">
                           </router-link>
-                          <a class="btn btn-danger" href="#">
-                            <i class="far fa-trash-alt"></i> Eliminar
+                          <a class="far fa-trash-alt" href="#" v-on:click="getremovexid(item.id)">
+                            <!-- <i class="far fa-trash-alt"></i> -->
                           </a>
                         </td>
                       </tr>
@@ -189,7 +189,18 @@ export default ({
     changePage: function (page) {
       this.pagination.number = page
       this.getall(page)
-    }},
+    },
+    getremovexid (id) {
+      axios.delete('http://localhost:8090/dispositivo/delete/' + id)
+        .then(response => {
+          this.getall(0)
+          console.log('Se elimino  :' + response.data)
+        })
+        .catch(response => {
+          console.log('hya problemas ' + response.data)
+        })
+    }
+  },
   created: function () {
     this.getall(0)
   }})
