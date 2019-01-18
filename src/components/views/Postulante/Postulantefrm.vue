@@ -43,9 +43,8 @@
                   <div class=" form-horizontal">
                 <label for="Nombre Dispositivo" class="col-sm-2">Tipo Documento</label>
                   <div class="col-sm-4">
-                    <select class="form-control" v-model="postulante.Sexo" id="sexo">
-                      <option value="0">Libretta xx</option>
-                      <option value="1">Libreta BB</option>
+                    <select class="form-control" v-model="postulante.codDocumento" id="documento">
+                      <option v-for="(doc,index) in listaDocumentos" :key="index" v-bind="doc.id">{{doc.descripcion}}</option>
                     </select>
                   </div>
                 <label for="Nombre Dispositivo" class="col-sm-2">Nro Documento</label>
@@ -80,15 +79,14 @@
                 <label for="Nombre Dispositivo" class="col-sm-2">Sexo</label>
                   <div class="col-sm-4">
                     <select class="form-control" v-model="postulante.Sexo" id="sexo">
-                      <option value="0">Masculino</option>
-                      <option value="1">Femenino</option>
+                      <option value="0">MASCULINO</option>
+                      <option value="1">FEMENINO</option>
                     </select>
                   </div>
                 <label for="Nombre Dispositivo" class="col-sm-2">Nivel Educacion</label>
                   <div class="col-sm-4">
-                    <select class="form-control" v-model="postulante.Sexo" id="sexo">
-                      <option value="0">Primaria</option>
-                      <option value="1">Seundaria</option>
+                    <select class="form-control" v-model="postulante.CodGrado" id="grado">
+                      <option v-for="(grado,index) in listaGrado" :key="index" v-bind="grado.id">{{grado.descripcion}}</option>
                     </select>
                   </div>
               </div>
@@ -99,16 +97,14 @@
                   <div class=" form-horizontal">
                 <label for="Nombre Dispositivo" class="col-sm-2">Estado Civil</label>
                   <div class="col-sm-4">
-                    <select class="form-control" v-model="postulante.Sexo" id="sexo">
-                      <option value="0">Casado</option>
-                      <option value="1">Soltero</option>
+                    <select class="form-control" v-model="postulante.CodEstadoCivil" id="estadocivil">
+                      <option v-for="(civil,index) in listaEstadoCivil" :key="index" v-bind="civil.id">{{civil.descripcion}}</option>
                     </select>
                   </div>
                 <label for="Nombre Dispositivo" class="col-sm-2">Pais Origen</label>
                   <div class="col-sm-4">
-                    <select class="form-control" v-model="postulante.Sexo" id="sexo">
-                      <option value="0">Peru</option>
-                      <option value="1">Extrangero</option>
+                    <select class="form-control" v-model="postulante.codigPais" id="pais">
+                      <option value="0" v-for="(pais,index) in listaPais" :key="index" v-bind="pais.id">{{pais.descripcion}}</option>
                     </select>
                   </div>
               </div>
@@ -161,6 +157,7 @@ export default {
         NroDocuemnto: '',
         CodSangre: '',
         CodEstadoCivil: '',
+        CodGrado: '',
         codigPais: '',
         nombre: '',
         ApellidoPaterno: '',
@@ -168,7 +165,11 @@ export default {
         FechaNacimiento: '',
         Correo: '',
         Sexo: ''
-      }
+      },
+      listaGrado: {},
+      listaDocumentos: {},
+      listaEstadoCivil: {},
+      listaPais: {}
     }
   },
   methods: {
@@ -218,10 +219,24 @@ export default {
         })
     }
   },
+  mounted: function () {
+    axios.get('http://localhost:8090/tipo/allinfopostulante')
+      .then(response => {
+        console.log(response.data.grado)
+        this.listaPais = response.data.paises
+        this.listaGrado = response.data.grado
+        this.listaEstadoCivil = response.data.estadocivil
+        this.listaDocumentos = response.data.identificacion
+        console.log(this.listaDocumentos)
+      })
+      .catch(error => {
+        console.log(error)
+      })
+  },
   created: function () {
     if (this.id !== undefined) {
       console.log('Actualizando el valor de if..... x)' + this.id)
-      this.postulantegetxid()
+      // this.postulantegetxid()
     } else {
       console.log('Nuevo..... x)')
     }
