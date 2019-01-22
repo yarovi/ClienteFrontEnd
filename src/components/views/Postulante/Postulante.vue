@@ -2,6 +2,41 @@
   <section class="content" id="main">
     <div class="row">
       <div class="col-xs-12">
+       <div class="box box-success">
+         <div class="box-header with-border">
+              <h3 class="box-title">Busqueda de postulantes</h3>
+            </div>
+             <div class="box-body">
+               <div class="form-group ">
+                <div class="row">
+                  <label for="Nombre Dispositivo" class="col-sm-2">Tipo</label>
+                    <div class="col-sm-2">
+                      <select class="form-control" v-model="selecttor" id="selecttor">
+                        <option value="nombre">Nombre y Apellidos</option>
+                        <option value="nrodocumento">Nro Documento</option>
+                       </select>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group ">
+                <div class="row">
+                  <label for="Nombre Dispositivo" class="col-sm-2">Valor</label>
+                    <div class="col-sm-6">
+                     <div class="input-group">
+                <input type="text" class="form-control" v-model="txtbuscar">
+                    <span class="input-group-btn">
+                      <button type="button" class="btn btn-info" v-on:click="buscarPostulantexParametro()" >Buscar!</button>
+                    </span>
+              </div>
+                  </div>
+                </div>
+              </div>
+             </div>
+      </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12">
         <router-link to="/crearpostulante" class="btn btn-block btn-success">Crear Postulante</router-link>
       </div>
     </div>
@@ -68,17 +103,35 @@
                           colspan="1"
                           aria-label="CSS grade: activate to sort column ascending"
                         >NroDocumento</th>
+                        <th
+                          class="sorting"
+                          tabindex="0"
+                          aria-controls="example2"
+                          rowspan="1"
+                          colspan="1"
+                          aria-label="CSS grade: activate to sort column ascending"
+                        >Direccion</th>
+                        <th
+                          class="sorting"
+                          tabindex="0"
+                          aria-controls="example2"
+                          rowspan="1"
+                          colspan="1"
+                          aria-label="CSS grade: activate to sort column ascending"
+                        >Acciones</th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr role="row" class="odd" v-for="(item,index) in stdata" :key="index">
                         <td class="sorting_1">{{item.id}}</td>
                         <td>{{item.nombre}}</td>
-                        <td>{{item.ApellidoPaterno}}</td>
-                        <td>{{item.ApellidoMaterno}}</td>
+                        <td>{{item.apellidopaterno}}</td>
+                        <td>{{item.apellidomaterno}}</td>
+                        <td>{{item.nrodocumento}}</td>
+                        <td>{{item.direccion}}</td>
                         <td>
                           <!-- <a class="btn btn-primary" href="#">     </a>                        -->
-                          <router-link v-bind:to="'/crearpuerto/'+item.id" class="far fa-edit">
+                          <router-link v-bind:to="'/crearpostulante/'+item.id" class="far fa-edit">
                           </router-link>
                           <a class="far fa-trash-alt" href="#" v-on:click="getremovexid(item.id)">
                             <!-- <i class="far fa-trash-alt"></i> -->
@@ -95,7 +148,7 @@
                     class="dataTables_info"
                     id="example2_info"
                     role="status"
-                    aria-live="polite">Total: {{currentPage}}</div>
+                    aria-live="polite">Total: {{pagination.numberOfElements }}</div>
                 </div>
                 <div class="col-sm-7">
                   <nav>
@@ -105,7 +158,7 @@
                           <span>Atras</span></a>
                       </li>
                       <li v-for="(page,index) in pagesNumber" v-bind:key="index" v-bind:class="[page == isActived? 'active' :'']" >
-                        <a href="#" @click.prevent="changePage(page)">
+                        <a href="#" @click.prevent="changePage(page-1)">
                           {{ page }}
                         </a>
                       </li>
@@ -132,7 +185,9 @@ export default ({
       stdata: [],
       currentPage: 4,
       pagination: [],
-      offset: 1
+      offset: 3,
+      selector: '',
+      txtbuscar: ''
     }
   },
   ready: function () {
@@ -165,7 +220,7 @@ export default ({
   methods: {
     getall (page) {
       // axios.get('http://localhost:8090/dispositivo/all')
-      axios.get('http://localhost:8090/dispositivo/findget?page=' + page)
+      axios.get('http://localhost:8090/postulantes/findget?page=' + page)
         .then(response => {
           this.stdata = response.data.content
           this.pagination = {
@@ -190,7 +245,17 @@ export default ({
       this.getall(page)
     },
     getremovexid (id) {
-      axios.delete('http://localhost:8090/dispositivo/delete/' + id)
+      axios.delete('http://localhost:8090/postulantes/delete/' + id)
+        .then(response => {
+          this.getall(0)
+          console.log('Se elimino  :' + response.data)
+        })
+        .catch(response => {
+          console.log('hya problemas ' + response.data)
+        })
+    },
+    buscarPostulantexParametro: function() {
+      axios.delete('http://localhost:8090/postulantes/buscarxparametro/' + this.selector)
         .then(response => {
           this.getall(0)
           console.log('Se elimino  :' + response.data)

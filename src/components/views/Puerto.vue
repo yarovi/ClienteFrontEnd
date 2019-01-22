@@ -96,7 +96,7 @@
                     class="dataTables_info"
                     id="example2_info"
                     role="status"
-                    aria-live="polite">Total: {{currentPage}}</div>
+                    aria-live="polite">Total: {{pagination.numberOfElements}}</div>
                 </div>
                 <div class="col-sm-7">
                   <nav>
@@ -106,7 +106,7 @@
                           <span>Atras</span></a>
                       </li>
                       <li v-for="(page,index) in pagesNumber" v-bind:key="index" v-bind:class="[page == isActived? 'active' :'']" >
-                        <a href="#" @click.prevent="changePage(page)">
+                        <a href="#" @click.prevent="changePage(page-1)">
                           {{ page }}
                         </a>
                       </li>

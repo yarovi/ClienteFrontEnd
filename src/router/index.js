@@ -7,6 +7,7 @@ import Examen from '@/components/views/Examen/Examen'
 import Puertofrm from '@/components/views/Puertofrm'
 import Postulante from '@/components/views/Postulante/Postulante'
 import Postulantefrm from '@/components/views/Postulante/Postulantefrm'
+// import '../../static/DatePicker/js/showDatePicker'
 Vue.use(Router)
 
 export default new Router({

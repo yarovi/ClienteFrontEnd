@@ -1,6 +1,10 @@
-$(function () {
-    //$('#reservation').daterangepicker()
-    $('#datepicker').datepicker({
-        autoclose: true
-      })
-})
+
+/* $(function() {
+  alert('oliiii')
+
+  $("#datepicker").datepicker({
+    format: "dd-mm-yyyy",
+    autoclose: true
+  });
+
+}); */
