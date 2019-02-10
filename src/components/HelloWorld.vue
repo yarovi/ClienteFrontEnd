@@ -48,6 +48,8 @@
           <ul class="treeview-menu">
             <li><router-link to="/puerto">Puerto</router-link></li>
             <li><router-link to="/empresa">Empresa</router-link></li>
+            <li><router-link to="/categoria">Categoria</router-link></li>
+            <li><router-link to="/subcategoria">Sub-Categoria</router-link></li>
           </ul>
         </li>
         <li class="active"><a href="#"><i class="fa fa-link"></i> <span><router-link to="/postulante">Postulante</router-link></span></a></li>
@@ -78,6 +80,9 @@
   <!-- /.content-wrapper -->
   <!-- Main Footer -->
   <footer class="main-footer">
+    <div>
+      <notifications group="foo" position="bottom right" ></notifications>
+    </div>
     <!-- To the right -->
     <div class="pull-right hidden-xs">
       GITECH

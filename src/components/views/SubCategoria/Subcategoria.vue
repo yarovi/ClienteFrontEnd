@@ -1,33 +1,19 @@
 <template>
   <section class="content" id="main">
-    <div class="row">
+       <div class="row">
       <div class="col-xs-12">
        <div class="box box-success">
          <div class="box-header with-border">
-              <h3 class="box-title">Busqueda de postulantes</h3>
+              <h3 class="box-title">Busqueda de por Categoria</h3>
             </div>
              <div class="box-body">
                <div class="form-group ">
                 <div class="row">
-                  <label for="Nombre Dispositivo" class="col-sm-2">Tipo</label>
+                  <label for="Nombre Dispositivo" class="col-sm-2">Seleccione una Categoria</label>
                     <div class="col-sm-2">
-                      <select class="form-control" v-model="selecttor" id="selecttor">
-                        <option value="nombre">Nombre y Apellidos</option>
-                        <option value="nrodocumento">Nro Documento</option>
+                      <select class="form-control" v-model="categoria" id="categoria" @change="selectedItem($event.target.value)">
+                        <option v-for="(item,index) in categorias" :key="index" :value="item.id" >{{item.descripcion }}</option>
                        </select>
-                  </div>
-                </div>
-              </div>
-              <div class="form-group ">
-                <div class="row">
-                  <label for="Nombre Dispositivo" class="col-sm-2">Valor</label>
-                    <div class="col-sm-6">
-                     <div class="input-group">
-                <input type="text" class="form-control" v-model="txtbuscar">
-                    <span class="input-group-btn">
-                      <button type="button" class="btn btn-info" v-on:click="buscarPostulantexParametro()" >Buscar!</button>
-                    </span>
-              </div>
                   </div>
                 </div>
               </div>
@@ -37,14 +23,16 @@
     </div>
     <div class="row">
       <div class="col-xs-12">
-        <router-link to="/crearpostulante" class="btn btn-block btn-success">Crear Postulante</router-link>
+        <router-link to="/mantenimientosubcat" class="btn btn-block btn-success">Mantenimiento Sub-Categorias </router-link>
+        <!-- <input type="button" class="btn btn-block btn-success" value="Mantenimiento Sub-Categorias" v-on:click="validSelectCategoria()"/> -->
+        <!-- <button v-on:click="getall()">pinchame</button> -->
       </div>
     </div>
     <div class="row">
       <div class="col-xs-12">
         <div class="box">
           <div class="box-header">
-            <h3 class="box-title">Todos los Postulantes.</h3>
+            <h3 class="box-title">Todos las Sub-Categorias.</h3>
           </div>
           <div class="box-body">
             <div id="example2_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
@@ -78,7 +66,7 @@
                           rowspan="1"
                           colspan="1"
                           aria-label="Browser: activate to sort column ascending"
-                        >Nombre</th>
+                        >Descripcion</th>
                         <th
                           class="sorting"
                           tabindex="0"
@@ -86,31 +74,7 @@
                           rowspan="1"
                           colspan="1"
                           aria-label="Platform(s): activate to sort column ascending"
-                        >A.Paterno</th>
-                        <th
-                          class="sorting"
-                          tabindex="0"
-                          aria-controls="example2"
-                          rowspan="1"
-                          colspan="1"
-                          aria-label="Engine version: activate to sort column ascending"
-                        >A.Materno</th>
-                        <th
-                          class="sorting"
-                          tabindex="0"
-                          aria-controls="example2"
-                          rowspan="1"
-                          colspan="1"
-                          aria-label="CSS grade: activate to sort column ascending"
-                        >NroDocumento</th>
-                        <th
-                          class="sorting"
-                          tabindex="0"
-                          aria-controls="example2"
-                          rowspan="1"
-                          colspan="1"
-                          aria-label="CSS grade: activate to sort column ascending"
-                        >Direccion</th>
+                        >Referencia</th>
                         <th
                           class="sorting"
                           tabindex="0"
@@ -123,17 +87,14 @@
                     </thead>
                     <tbody>
                       <tr role="row" class="odd" v-for="(item,index) in stdata" :key="index">
-                        <td class="sorting_1">{{item.id}}</td>
-                        <td>{{item.nombre}}</td>
-                        <td>{{item.apellidopaterno}}</td>
-                        <td>{{item.apellidomaterno}}</td>
-                        <td>{{item.nrodocumento}}</td>
-                        <td>{{item.direccion}}</td>
+                        <td class="sorting_1">{{item.tipoid}}</td>
+                        <td>{{item.descripcion}}</td>
+                        <td>{{item.referencia}}</td>
                         <td>
                           <!-- <a class="btn btn-primary" href="#">     </a>                        -->
-                          <router-link v-bind:to="'/crearpostulante/'+item.id" class="far fa-edit">
+                          <router-link v-bind:to="'/mantenimientosubcat/'+item.tipoid" class="far fa-edit">
                           </router-link>
-                          <a class="far fa-trash-alt" href="#" v-on:click="getremovexid(item.id)">
+                          <a class="far fa-trash-alt" href="#" v-on:click="removeItemByID(item.tipoid)">
                             <!-- <i class="far fa-trash-alt"></i> -->
                           </a>
                         </td>
@@ -148,7 +109,7 @@
                     class="dataTables_info"
                     id="example2_info"
                     role="status"
-                    aria-live="polite">Total: {{pagination.numberOfElements }}</div>
+                    aria-live="polite">Total: {{pagination.numberOfElements}}</div>
                 </div>
                 <div class="col-sm-7">
                   <nav>
@@ -182,12 +143,14 @@ import axios from 'axios'
 export default ({
   data: function () {
     return {
+      categoria: '',
       stdata: [],
       currentPage: 4,
       pagination: [],
-      offset: 3,
-      selector: '',
-      txtbuscar: ''
+      offset: 1,
+      categorias: [],
+      page: 0,
+      valor: 0
     }
   },
   ready: function () {
@@ -220,7 +183,7 @@ export default ({
   methods: {
     getall (page) {
       // axios.get('http://localhost:8090/dispositivo/all')
-      axios.get('http://localhost:8090/postulantes/findget?page=' + page)
+      /* axios.get('http://localhost:8090/subcategoria/findPageBySubCategory?page=' + page)
         .then(response => {
           this.stdata = response.data.content
           this.pagination = {
@@ -238,33 +201,77 @@ export default ({
         })
         .catch(error => {
           console.log(error)
+        }) */
+      axios.get('http://localhost:8090/subcategoria/findPageBySubCategory?id=' + this.valor + '&page=' + page)
+        .then(response => {
+          this.stdata = response.data.content
+          this.pagination = {
+            totalPages: response.data.totalPages,
+            totalElements: response.data.totalElements,
+            last: response.data.last,
+            numberOfElements: response.data.numberOfElements,
+            first: response.data.first,
+            sort: response.data.sort,
+            size: response.data.size,
+            number: response.data.number
+          }
+          console.log(this.pagination)
+        })
+        .catch(error => {
+          console.log(error)
         })
     },
     changePage: function (page) {
       this.pagination.number = page
       this.getall(page)
     },
-    getremovexid (id) {
-      axios.delete('http://localhost:8090/postulantes/delete/' + id)
+    removeItemByID (id) {
+      axios.delete('http://localhost:8090/subcategoria/delete/' + id)
         .then(response => {
+          this.mostrarNotificacion('success', 'Operacion correctamente.!', 'Se elimino registro con id :' + id + '.')
           this.getall(0)
           console.log('Se elimino  :' + response.data)
         })
-        .catch(response => {
-          console.log('hya problemas ' + response.data)
+        .catch(error => {
+          this.mostrarNotificacion('error', 'Ups encontro un Problema.!', error.mensaje)
+          console.log('hya problemas ' + error.data)
         })
     },
-    buscarPostulantexParametro: function () {
-      axios.delete('http://localhost:8090/postulantes/buscarxparametro?tipo=' + this.selector + '?parametro=' + this.txtbuscar)
-        .then(response => {
-          console.log('Se elimino  :' + response.data)
-        })
-        .catch(response => {
-          console.log('hya problemas ' + response.data)
-        })
+    selectedItem: function (value) {
+      // alert('hola ' + value)
+      this.valor = value
+      this.getall(this.page)
+    },
+    validSelectCategoria: function () {
+      if (this.valor > 0) {
+        this.$router.push('/mantenimientosubcat/' + this.valor)
+      } else {
+        alert('seleccione una categioria para crear.')
+      }
+    },
+    mostrarNotificacion: function (estado, titulo, contenido) {
+      this.$notify({
+        group: 'foo',
+        type: estado,
+        title: titulo,
+        text: contenido
+      })
     }
   },
+  mounted: function () {
+    // Esta funcion inicializa los datos de los controles
+    axios.get('http://localhost:8090/categoria/allCategory')
+      .then(response => {
+        console.log(response.data.grado)
+        this.categorias = response.data
+        console.log(this.listaDocumentos)
+      })
+      .catch(error => {
+        console.log(error)
+      })
+  },
   created: function () {
-    this.getall(0)
+  //  this.getall(0)
+  // this.page = 0
   }})
 </script>
