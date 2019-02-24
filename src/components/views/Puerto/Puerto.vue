@@ -53,14 +53,14 @@
                           colspan="1"
                           aria-label="Platform(s): activate to sort column ascending"
                         >Puerto</th>
-                        <th
+                        <!-- <th
                           class="sorting"
                           tabindex="0"
                           aria-controls="example2"
                           rowspan="1"
                           colspan="1"
                           aria-label="Engine version: activate to sort column ascending"
-                        >Estado</th>
+                        >Estado</th> -->
                         <th
                           class="sorting"
                           tabindex="0"
@@ -76,7 +76,7 @@
                         <td class="sorting_1">{{item.id}}</td>
                         <td>{{item.descripcion}}</td>
                         <td>{{item.puerto}}</td>
-                        <td>Activo</td>
+                        <!-- <td>Activo</td> -->
                         <td>
                           <!-- <a class="btn btn-primary" href="#">     </a>                        -->
                           <router-link v-bind:to="'/crearpuerto/'+item.id" class="far fa-edit">
@@ -193,12 +193,20 @@ export default ({
     getremovexid (id) {
       axios.delete('http://localhost:8090/dispositivo/delete/' + id)
         .then(response => {
+          this.mostrarNotificacion('success', 'Operacion correctamente.!', 'Se elimino registro con id :' + id + '.')
           this.getall(0)
-          console.log('Se elimino  :' + response.data)
         })
-        .catch(response => {
-          console.log('hya problemas ' + response.data)
+        .catch(error => {
+          this.mostrarNotificacion('error', 'Ups encontro un Problema.!', error.detalle)
         })
+    },
+    mostrarNotificacion: function (estado, titulo, contenido) {
+      this.$notify({
+        group: 'foo',
+        type: estado,
+        title: titulo,
+        text: contenido
+      })
     }
   },
   created: function () {

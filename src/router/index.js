@@ -3,7 +3,9 @@ import Router from 'vue-router'
 import HelloWorld from '@/components/HelloWorld'
 import Puerto from '@/components/views/Puerto/Puerto'
 import Empresa from '@/components/views/Empresa/Empresa'
+import Empresafrm from '@/components/views/Empresa/Empresafrm'
 import Examen from '@/components/views/Examen/Examen'
+import Examenfrm from '@/components/views/Examen/Examenfrm'
 import Puertofrm from '@/components/views/Puerto/Puertofrm'
 import Postulante from '@/components/views/Postulante/Postulante'
 import Postulantefrm from '@/components/views/Postulante/Postulantefrm'
@@ -38,6 +40,11 @@ export default new Router({
           component: Empresa
         },
         {
+          path: '/crearempresa/:id?',
+          name: 'Empresafrm',
+          component: Empresafrm
+        },
+        {
           path: '/postulante',
           name: 'Postulante',
           component: Postulante
@@ -51,6 +58,11 @@ export default new Router({
           path: '/examen',
           name: 'Examen',
           component: Examen
+        },
+        {
+          path: '/crearexamen/:id?',
+          name: 'Examenfrm',
+          component: Examenfrm
         },
         {
           path: '/mantenimientocat/:id?',

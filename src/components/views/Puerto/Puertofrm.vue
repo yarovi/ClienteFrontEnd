@@ -12,7 +12,11 @@
           <div class="box-body">
             <div class="form-group">
               <label for="Nombre Dispositivo">Codigo</label>
-              <input type="text" class="form-control" id="fieldid"  v-model="dispositivo.fieldid" disabled>
+              <input
+              type="text"
+              class="form-control"
+              id="fieldid"
+              v-model="dispositivo.fieldid" disabled>
             </div>
             <div class="form-group">
               <label for="Nombre Dispositivo">Descripcion</label>
@@ -20,20 +24,34 @@
                 type="text"
                 class="form-control"
                 id="fielddescripcion"
-                placeholder="Ingrese Descripcion" v-model="dispositivo.fielddescripcion"
-              >
+                placeholder="Ingrese Descripcion"
+                v-model="dispositivo.fielddescripcion"
+                v-model.trim="$v.dispositivo.fielddescripcion.$model" maxlength="25"  >
+                <div class="error" v-if="$v.dispositivo.fielddescripcion.$error">
+                  <li v-if="!$v.dispositivo.fielddescripcion.required">Rellene este campo</li>
+                </div>
             </div>
             <div class="form-group">
-              <label for="puer">Puerto</label>
-              <input type="text" class="form-control" id="fieldpuerto" placeholder="Puerto" v-model="dispositivo.fieldpuerto">
+              <label for="puer">Seleccione un Puerto</label>
+              <!-- <input type="text" class="form-control" id="fieldpuerto" placeholder="Puerto" v-model="dispositivo.fieldpuerto"> -->
+              <select class="form-control"
+              v-model="dispositivo.fieldpuerto"
+              id="fielpuerto"
+              v-model.trim="$v.dispositivo.fieldpuerto.$model">
+                <option v-for="(d,index) in lstaDispositivo" :key="index" :value="d.nombre">{{d.nombre}}</option>
+              </select>
+              <div class="error"
+                v-if="$v.dispositivo.fieldpuerto.$error">
+                <li v-if="!$v.dispositivo.fieldpuerto.required">Selecione una Categoria</li>
+              </div>
             </div>
-            <div class="form-group">
+            <!-- <div class="form-group">
               <label>Estado</label>
               <select class="form-control" v-model="dispositivo.fieldestado" id="fieldestado">
                 <option value="0">Activo</option>
                 <option value="1">Desactivo</option>
               </select>
-            </div>
+            </div> -->
           </div>
           <!-- /.box-body -->
           <div class="box-footer">
@@ -47,6 +65,7 @@
   </div>
 </template>
 <script>
+import {required} from 'vuelidate/lib/validators'
 import axios from 'axios'
 export default {
   data: function () {
@@ -55,29 +74,48 @@ export default {
       dispositivo: {
         fieldid: '0',
         fielddescripcion: '',
-        fieldpuerto: '',
-        fieldestado: ''
+        fieldpuerto: ''
+        // fieldestado: ''
+      },
+      lstaDispositivo: []
+    }
+  },
+  validations: {
+    dispositivo: {
+      fielddescripcion: {
+        required
+      },
+      fieldpuerto: {
+        required
       }
     }
   },
   methods: {
     dispositivocreate () {
-      console.log('dato..... ' + this.dispositivo.fieldid)
-      if (this.dispositivo.fieldid > 0) {
-        console.log('llamando para actualizar..... x)')
-        this.dispositivoupdate()
-      } else {
-        axios.post('http://localhost:8090/dispositivo/create',
-          {id: this.dispositivo.fieldid,
-            descripcion: this.dispositivo.fielddescripcion,
-            puerto: this.dispositivo.fieldpuerto,
-            estado: this.dispositivo.fieldestado})
-          .then(response => {
-            console.log(response.data)
-          })
-          .catch(error => {
-            console.log(error)
-          })
+      if (this.ejecutarValidacion() === true) {
+        console.log('dato..... ' + this.dispositivo.fieldid)
+        if (this.dispositivo.fieldid > 0) {
+          console.log('llamando para actualizar..... x)')
+          this.dispositivoupdate()
+        } else {
+          axios.post('http://localhost:8090/dispositivo/create',
+            {id: this.dispositivo.fieldid,
+              descripcion: this.dispositivo.fielddescripcion,
+              puerto: this.dispositivo.fieldpuerto,
+              estado: this.dispositivo.fieldestado})
+            .then(response => {
+              console.log(response.data)
+              this.mostrarNotificacion('success', 'Operacion correctamente.!', 'Se actualizo :' + this.dispositivo.fielddescripcion + '.')
+              setTimeout(() => {
+                console.log(response.data)
+                this.$router.push('/puerto')
+              }, 1500)
+            })
+            .catch(error => {
+              this.mostrarNotificacion('error', 'Ups encontro un Problema.!', error.response.data.detalle)
+              console.log(error)
+            })
+        }
       }
     },
     dispositivogetxid () {
@@ -100,11 +138,34 @@ export default {
           estado: this.dispositivo.fieldestado})
         .then(response => {
           console.log(response.data)
-          this.$router.push('/puerto')
+          this.mostrarNotificacion('success', 'Operacion correctamente.!', 'Se actualizo :' + this.dispositivo.fielddescripcion + '.')
+          setTimeout(() => {
+            console.log(response.data)
+            this.$router.push('/puerto')
+          }, 1500)
         })
         .catch(error => {
+          this.mostrarNotificacion('error', 'Ups encontro un Problema.!', error.response.data.detalle)
           console.log(error)
         })
+    },
+    mostrarNotificacion: function (estado, titulo, contenido) {
+      this.$notify({
+        group: 'foo',
+        type: estado,
+        title: titulo,
+        text: contenido
+      })
+    },
+    ejecutarValidacion: function () {
+      this.$v.$touch()
+      if (this.$v.$invalid) {
+        this.submitStatus = 'ERROR'
+        return false
+      } else {
+        return true
+        // alert('todo bien.')
+      }
     }
   },
   created: function () {
@@ -114,6 +175,16 @@ export default {
     } else {
       console.log('Nuevo..... x)')
     }
+  },
+  mounted: function () {
+    axios.get('http://localhost:8090/dispositivo/listadispositivo')
+      .then(res => {
+        console.log(res)
+        this.lstaDispositivo = res.data
+      })
+      .catch(er => {
+        console.log('algo salio mal')
+      })
   }
 }
 </script>

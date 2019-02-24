@@ -192,7 +192,7 @@ export default ({
         .then(response => {
           this.mostrarNotificacion('success', 'Operacion correctamente.!', 'Se elimino registro con id :' + id + '.')
           this.getall(0)
-          console.log('Se elimino  :' + response.data)
+          console.log('Se elimino  :' + response)
         })
         .catch(error => {
           this.mostrarNotificacion('error', 'Ups encontro un Problema.!', error.response.data.detalle)

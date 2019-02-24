@@ -52,7 +52,7 @@
             <li><router-link to="/subcategoria">Sub-Categoria</router-link></li>
           </ul>
         </li>
-        <li class="active"><a href="#"><i class="fa fa-link"></i> <span><router-link to="/postulante">Postulante</router-link></span></a></li>
+        <li ><a href="#"><i class="fa fa-link"></i> <span><router-link to="/postulante">Postulante</router-link></span></a></li>
         <li><a href="#"><i class="fa fa-link"></i> <span><router-link to="/examen">Examen</router-link></span></a></li>
       </ul>
       <!-- /.sidebar-menu -->

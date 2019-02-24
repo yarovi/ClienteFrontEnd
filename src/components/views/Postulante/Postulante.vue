@@ -4,14 +4,14 @@
       <div class="col-xs-12">
        <div class="box box-success">
          <div class="box-header with-border">
-              <h3 class="box-title">Busqueda de postulantes</h3>
+              <h3 class="box-title">Búsqueda de postulantes</h3>
             </div>
              <div class="box-body">
                <div class="form-group ">
                 <div class="row">
                   <label for="Nombre Dispositivo" class="col-sm-2">Tipo</label>
                     <div class="col-sm-2">
-                      <select class="form-control" v-model="selecttor" id="selecttor">
+                      <select class="form-control" v-model="selector" id="selecttor">
                         <option value="nombre">Nombre y Apellidos</option>
                         <option value="nrodocumento">Nro Documento</option>
                        </select>
