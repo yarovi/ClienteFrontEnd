@@ -16,7 +16,7 @@
                    <input type="text" class="form-control" id="dnibuscar"  maxlength="8" v-on:keyup="mostrarFiltro($event)"  >
                 </div>
                  <div class="col-sm-2">
-                   <input type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-default" value="Buscar" @click="buscarPaciente()" >
+                   <input type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-postulante" value="Buscar" @click="buscarPaciente()" >
                 </div>
                 </div>
               </div>
@@ -28,7 +28,7 @@
                 <div class="col-sm-10">
                    <input type="text"
                    class="form-control"
-                    id="nombre"
+                    id="nombrePostulante"
                     placeholder="Tu nombre"
                     >
                 </div>
@@ -254,7 +254,7 @@
     <div class="col-md-3"></div>
   </div>
   <!-- modela de busqueda -->
- <div class="modal fade" id="modal-default" style="display: none;">
+ <div class="modal fade" id="modal-postulante" style="display: none;">
           <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">
@@ -263,37 +263,35 @@
                 <h4 class="modal-title">Búsqueda</h4>
               </div>
               <div class="modal-body">
-                <!-- <p>One fine body…</p> -->
                 <div class="box">
                     <div class="box-header">
-                      <h3 class="box-title">Todos Postulantes</h3>
+                        <h3 class="box-title">Todos Postulantes</h3>
                     </div>
-            <!-- /.box-header -->
-                    <div class="box-body table-responsive no-padding">
-                      <table class="table table-bordered table-striped" id="tablafiltro">
+                    <div class="">
+                      <table class="table table-bordered table-hover dataTable" id="tablafiltro">
                         <thead>
                           <tr>
                             <th>ID</th>
                             <th>Paciente</th>
-                            <th>Estado</th>
+                            <th>Fecha Registro</th>
                           </tr>
                         </thead>
                         <tbody>
                           <tr v-for="(d,index) in pacientes " :key="index" >
                               <td>{{d.id}}</td>
-                              <td>{{d.codigo}}</td>
-                              <td>{{d.fechaRegistro}}</td>
+                              <td>{{d.nombres}}</td>
+                              <td>{{d.fecha}}</td>
                           </tr>
                         </tbody>
                         <tfoot>
                         </tfoot>
                       </table>
                     </div>
-                  </div>
-            </div>
+                </div>
+               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-primary">Selección</button>
+                <button type="button" class="btn btn-primary" id="elegirPostuante">Selección</button>
               </div>
             </div>
           </div>

@@ -13,6 +13,7 @@ import Categoria from '@/components/views/Categoria/Categoria'
 import Categoriafrm from '@/components/views/Categoria/Categoriafrm'
 import Subcategoria from '@/components/views/SubCategoria/Subcategoria'
 import Subcategoriafrm from '@/components/views/SubCategoria/Subcategoriafrm'
+import Evaluar from '@/components/views/Evaluar/Evaluar'
 // import '../../static/DatePicker/js/showDatePicker'
 Vue.use(Router)
 
@@ -83,6 +84,11 @@ export default new Router({
           path: '/subcategoria',
           name: 'Subcateoria',
           component: Subcategoria
+        },
+        {
+          path: '/evaluar',
+          name: 'Evaluar',
+          component: Evaluar
         }
 
       ]

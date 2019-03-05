@@ -54,6 +54,7 @@
         </li>
         <li ><a href="#"><i class="fa fa-link"></i> <span><router-link to="/postulante">Postulante</router-link></span></a></li>
         <li><a href="#"><i class="fa fa-link"></i> <span><router-link to="/examen">Examen</router-link></span></a></li>
+        <li><a href="#"><i class="fa fa-link"></i> <span><router-link to="/evaluar">Evaluar</router-link></span></a></li>
       </ul>
       <!-- /.sidebar-menu -->
     </section>
