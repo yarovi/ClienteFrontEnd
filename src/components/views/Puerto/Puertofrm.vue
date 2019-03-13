@@ -65,8 +65,8 @@
   </div>
 </template>
 <script>
-import {required} from 'vuelidate/lib/validators'
 import axios from 'axios'
+import {required} from 'vuelidate/lib/validators'
 export default {
   data: function () {
     return {
@@ -98,7 +98,7 @@ export default {
           console.log('llamando para actualizar..... x)')
           this.dispositivoupdate()
         } else {
-          axios.post('http://localhost:8090/dispositivo/create',
+          axios.post('/dispositivo/create',
             {id: this.dispositivo.fieldid,
               descripcion: this.dispositivo.fielddescripcion,
               puerto: this.dispositivo.fieldpuerto,
@@ -119,7 +119,7 @@ export default {
       }
     },
     dispositivogetxid () {
-      axios.get('http://localhost:8090/dispositivo/getid/' + this.id)
+      axios.get('/dispositivo/getid/' + this.id)
         .then(response => {
           console.log(response.data)
           this.dispositivo.fieldid = response.data.id
@@ -131,7 +131,7 @@ export default {
         })
     },
     dispositivoupdate () {
-      axios.put('http://localhost:8090/dispositivo/update/' + this.id,
+      axios.put('/dispositivo/update/' + this.id,
         { id: this.dispositivo.fieldid,
           descripcion: this.dispositivo.fielddescripcion,
           puerto: this.dispositivo.fieldpuerto,
@@ -177,7 +177,7 @@ export default {
     }
   },
   mounted: function () {
-    axios.get('http://localhost:8090/dispositivo/listadispositivo')
+    axios.get('/dispositivo/listadispositivo')
       .then(res => {
         console.log(res)
         this.lstaDispositivo = res.data

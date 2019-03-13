@@ -163,7 +163,7 @@ export default ({
   methods: {
     getall (page) {
       // axios.get('http://localhost:8090/dispositivo/all')
-      axios.get('http://localhost:8090/categoria/findPageByCategory?page=' + page)
+      axios.get('/categoria/findPageByCategory?page=' + page)
         .then(response => {
           this.stdata = response.data.content
           this.pagination = {
@@ -188,7 +188,7 @@ export default ({
       this.getall(page)
     },
     removeItemByID (id) {
-      axios.delete('http://localhost:8090/categoria/delete/' + id)
+      axios.delete('/categoria/delete/' + id)
         .then(response => {
           this.mostrarNotificacion('success', 'Operacion correctamente.!', 'Se elimino registro con id :' + id + '.')
           this.getall(0)

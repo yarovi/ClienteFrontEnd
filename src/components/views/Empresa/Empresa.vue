@@ -121,7 +121,7 @@ export default ({
   },
   methods: {
     removeItemByID (id) {
-      axios.delete('http://localhost:8090/empresa/delete/' + id)
+      axios.delete('/empresa/delete/' + id)
         .then(res => {
           this.mostrarNotificacion('success', 'Operacion correctamente.!', 'Se elimino registro con id :' + id + '.')
           this.getinfoEmpresa()
@@ -139,7 +139,7 @@ export default ({
       })
     },
     getinfoEmpresa: function () {
-      axios.get('http://localhost:8090/empresa/getinfoEmpresa')
+      axios.get('/empresa/getinfoEmpresa')
         .then(res => {
           console.log(res.data)
           this.empresa = res.data

@@ -202,7 +202,7 @@ export default ({
         .catch(error => {
           console.log(error)
         }) */
-      axios.get('http://localhost:8090/subcategoria/findPageBySubCategory?id=' + this.valor + '&page=' + page)
+      axios.get('/subcategoria/findPageBySubCategory?id=' + this.valor + '&page=' + page)
         .then(response => {
           this.stdata = response.data.content
           this.pagination = {
@@ -226,7 +226,7 @@ export default ({
       this.getall(page)
     },
     removeItemByID (id) {
-      axios.delete('http://localhost:8090/subcategoria/delete/' + id)
+      axios.delete('/subcategoria/delete/' + id)
         .then(response => {
           this.mostrarNotificacion('success', 'Operacion correctamente.!', 'Se elimino registro con id :' + id + '.')
           this.getall(0)
@@ -260,7 +260,7 @@ export default ({
   },
   mounted: function () {
     // Esta funcion inicializa los datos de los controles
-    axios.get('http://localhost:8090/categoria/allCategory')
+    axios.get('/categoria/allCategory')
       .then(response => {
         console.log(response.data.grado)
         this.categorias = response.data

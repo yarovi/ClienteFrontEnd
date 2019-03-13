@@ -67,7 +67,7 @@ export default {
           console.log('llamando para actualizar..... x)')
           this.categoriaupdate()
         } else {
-          axios.post('http://localhost:8090/categoria/create',
+          axios.post('/categoria/create',
             {tipoid: this.categoria.id,
               descripcion: this.categoria.descripcion,
               codtipo: this.categoria.codtipo
@@ -88,7 +88,7 @@ export default {
       }
     },
     categoriagetxid () {
-      axios.get('http://localhost:8090/categoria/getItemById/' + this.id)
+      axios.get('/categoria/getItemById/' + this.id)
         .then(response => {
           console.log(response.data)
           this.categoria.id = response.data.tipoid
@@ -100,7 +100,7 @@ export default {
         })
     },
     categoriaupdate () {
-      axios.put('http://localhost:8090/categoria/update/' + this.id,
+      axios.put('/categoria/update/' + this.id,
         { id: this.categoria.fieldid,
           descripcion: this.categoria.descripcion,
           CodTipo: this.categoria.codtipo

@@ -305,6 +305,7 @@
                       Si llega al maximo de errores: 12 o tiempo en errores:5s.
                     </p>
                  </div>
+
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cerrar</button>
@@ -363,7 +364,7 @@ export default ({
   methods: {
     getall (page) {
       let params = {tipo: this.selector, valor: this.txtbuscar, page: page}
-      axios.get('http://localhost:8090/postulantes/allpostulantetoexamen', { params })
+      axios.get('/postulantes/allpostulantetoexamen', { params })
         .then(response => {
           this.stdata = response.data.content
           this.pagination = {
@@ -396,5 +397,7 @@ export default ({
   },
   created: function () {
     this.getall(0)
-  }})
+  }
+  // probando metodos del socket
+})
 </script>

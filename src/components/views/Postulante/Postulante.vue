@@ -219,8 +219,8 @@ export default ({
   },
   methods: {
     getall (page) {
-      // axios.get('http://localhost:8090/dispositivo/all')
-      axios.get('http://localhost:8090/postulantes/findget?page=' + page)
+      let params = {tipo: this.selector, valor: this.txtbuscar, page: page}
+      axios.get('/postulantes/findget', {params})
         .then(response => {
           this.stdata = response.data.content
           this.pagination = {
@@ -245,7 +245,7 @@ export default ({
       this.getall(page)
     },
     getremovexid (id) {
-      axios.delete('http://localhost:8090/postulantes/delete/' + id)
+      axios.delete('/postulantes/delete/' + id)
         .then(response => {
           this.getall(0)
           console.log('Se elimino  :' + response.data)
@@ -255,13 +255,7 @@ export default ({
         })
     },
     buscarPostulantexParametro: function () {
-      axios.delete('http://localhost:8090/postulantes/buscarxparametro?tipo=' + this.selector + '?parametro=' + this.txtbuscar)
-        .then(response => {
-          console.log('Se elimino  :' + response.data)
-        })
-        .catch(response => {
-          console.log('hya problemas ' + response.data)
-        })
+      this.getall(0)
     }
   },
   created: function () {

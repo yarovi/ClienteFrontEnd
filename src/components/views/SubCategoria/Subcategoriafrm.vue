@@ -99,7 +99,7 @@ export default {
           this.subcategoriaupdate()
         } else {
           // http://localhost:8090/subcategoria/create
-          axios.post('http://localhost:8090/subcategoria/create',
+          axios.post('/subcategoria/create',
             {id: this.subcategoria.fieldid,
               descripcion: this.subcategoria.fielddescripcion,
               referencia: this.subcategoria.fieldreferencia,
@@ -120,7 +120,7 @@ export default {
       }
     },
     subcategoriaByID () {
-      axios.get('http://localhost:8090/subcategoria/getItemById/' + this.id)
+      axios.get('/subcategoria/getItemById/' + this.id)
         .then(response => {
           console.log(response.data)
           this.subcategoria.fieldid = response.data.tipoid
@@ -133,7 +133,7 @@ export default {
         })
     },
     subcategoriaupdate () {
-      axios.put('http://localhost:8090/subcategoria/update/' + this.id,
+      axios.put('/subcategoria/update/' + this.id,
         { id: this.subcategoria.fieldid,
           descripcion: this.subcategoria.fielddescripcion,
           referencia: this.subcategoria.fieldreferencia,
@@ -180,7 +180,7 @@ export default {
     }
   },
   mounted: function () {
-    axios.get('http://localhost:8090/categoria/allCategory')
+    axios.get('/categoria/allCategory')
       .then(response => {
         console.log(response.data.grado)
         this.categorias = response.data

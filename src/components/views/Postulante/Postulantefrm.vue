@@ -26,7 +26,7 @@
                         id="apellidopaterno"
                         placeholder="Ingrese A. Paterno"
                         v-model="postulante.ApellidoPaterno"
-                        v-model.trim="$v.postulante.ApellidoPaterno.$model" >
+                        v-model.trim="$v.postulante.ApellidoPaterno.$model" maxlength="20">
                         <div class="error" v-if="$v.postulante.ApellidoPaterno.$error">
                           <li v-if="!$v.postulante.ApellidoPaterno.required">Rellene este campo</li>
                         </div>
@@ -38,7 +38,7 @@
                         id="apellidomaterno"
                         placeholder="Ingrese A. Materno"
                         v-model="postulante.ApellidoMaterno"
-                        v-model.trim="$v.postulante.ApellidoMaterno.$model" >
+                        v-model.trim="$v.postulante.ApellidoMaterno.$model" maxlength="20">
                           <div class="error" v-if="$v.postulante.ApellidoMaterno.$error">
                             <li v-if="!$v.postulante.ApellidoMaterno.required">Rellene este campo</li>
                           </div>
@@ -55,7 +55,7 @@
                       id="nombre"
                       placeholder="Tu nombre"
                       v-model="postulante.Nombre"
-                      v-model.trim="$v.postulante.Nombre.$model">
+                      v-model.trim="$v.postulante.Nombre.$model" maxlength="30">
                       <div class="error" v-if="$v.postulante.Nombre.$error">
                         <li v-if="!$v.postulante.Nombre.required">Rellene este campo</li>
                     </div>
@@ -84,7 +84,7 @@
                               id="nrodocumento"
                               placeholder="Nro de Documento"
                               v-model="postulante.NroDocumento"
-                              v-model.trim="$v.postulante.NroDocumento.$model" >
+                              v-model.trim="$v.postulante.NroDocumento.$model" maxlength="10" >
                                 <div class="error" v-if="$v.postulante.NroDocumento.$error">
                                   <li v-if="!$v.postulante.NroDocumento.required">Ingrese un documento</li>
                                 </div>
@@ -106,7 +106,7 @@
                             class="form-control pull-right"
                             id="fechanacimiento"
                             v-model="postulante.FechaNacimiento"
-                            v-model.trim="$v.postulante.FechaNacimiento.$model" v-on:keyup.enter="calcularEdad($event)" >
+                            v-model.trim="$v.postulante.FechaNacimiento.$model" v-on:blur="calcularEdad($event)" >
                             <div class="error" v-if="$v.postulante.FechaNacimiento.$error">
                             <li v-if="!$v.postulante.FechaNacimiento.required" >Ingrese una fecha </li>
                         </div>
@@ -114,7 +114,7 @@
                         </div>
                       <label for="edad" class="col-sm-2">Edad</label>
                         <div class="col-sm-4">
-                          <input type="text" class="form-control" id="edad" placeholder="Edad" v-model="postulante.Edad" >
+                          <input type="text" class="form-control" id="edad" placeholder="Edad" v-model="postulante.Edad" disabled>
                         </div>
                     </div>
                 </div>
@@ -143,7 +143,7 @@
                       id="grado"
                       v-model="postulante.CodGrado"
                       v-model.trim="$v.postulante.CodGrado.$model">
-                        <option v-for="(grado,index) in listaGrado" :key="index" :value="grado.tipoid">{{grado.descripcion}}</option>
+                        <option v-for="(grado,index) in listaGrado" :key="index" :value="grado.id">{{grado.descripcion}}</option>
                       </select>
                       <div class="error" v-if="$v.postulante.CodGrado.$error">
                         <li v-if="!$v.postulante.CodGrado.required">seleccione un grado</li>
@@ -161,9 +161,10 @@
                     id="estadocivil"
                     v-model="postulante.CodEstadoCivil"
                     v-model.trim="$v.postulante.CodEstadoCivil.$model">
-                      <option v-for="(civil,index) in listaEstadoCivil" :key="index" :value="civil.tipoid">{{civil.descripcion}}</option>
+                      <option v-for="(civil,index) in listaEstadoCivil" :key="index" :value="civil.id">{{civil.descripcion}}</option>
                     </select>
-                    <div class="error" v-if="$v.postulante.CodEstadoCivil.$error">
+                    <div class="error"
+                         v-if="$v.postulante.CodEstadoCivil.$error">
                       <li v-if="!$v.postulante.CodEstadoCivil.required">seleccione estado civil</li>
                     </div>
                   </div>
@@ -174,7 +175,7 @@
                     id="codpais"
                     v-model="postulante.CodigoPais"
                     v-model.trim="$v.postulante.CodigoPais.$model">
-                      <option  v-for="(pais,index) in listaPais" :key="index" :value="pais.tipoid">{{pais.descripcion}}</option>
+                      <option  v-for="(pais,index) in listaPais" :key="index" :value="pais.id">{{pais.descripcion}}</option>
                     </select>
                     <div class="error" v-if="$v.postulante.CodigoPais.$error">
                       <li v-if="!$v.postulante.CodigoPais.required">seleccione país</li>
@@ -188,25 +189,25 @@
                     <div class=" form-horizontal">
                       <label for="telefono" class="col-sm-2">Teléfono</label>
                         <div class="col-sm-4">
-                          <input type="text" class="form-control" id="telefono" placeholder="Ingrese Telefono" v-model="postulante.Telefono" >
+                          <input type="text" class="form-control" id="telefono" placeholder="Ingrese Telefono" v-model="postulante.Telefono" maxlength="9">
                         </div>
                         <label for="paisorigen" class="col-sm-2">Ocupación</label>
                         <div class="col-sm-4">
-                          <input type="text" class="form-control" id="ocupacion" placeholder="Ingrese Ocupación" v-model="postulante.Ocupacion" >
+                          <input type="text" class="form-control" id="ocupacion" placeholder="Ingrese Ocupación" v-model="postulante.Ocupacion" maxlength="12" >
                         </div>
                     </div>
                 </div>
               </div>
               <div class="form-group">
                 <div class="row">
-                  <label for="direccion" class="col-sm-2">Dirección</label>
+                  <label for="direccion" class="col-sm-2" >Dirección</label>
                 <div class="col-sm-10">
                    <input type="text"
                    class="form-control"
                    id="direccion"
                    placeholder="Tu direccion donde vive"
                     v-model="postulante.Direccion"
-                    v-model.trim="$v.postulante.Direccion.$model" >
+                    v-model.trim="$v.postulante.Direccion.$model" maxlength="40">
                    <div class="error" v-if="$v.postulante.Direccion.$error" >
                       <li v-if="!$v.postulante.Direccion.required">ingrese una dirección</li>
                     </div>
@@ -217,7 +218,7 @@
                 <div class="row">
                   <label for="correo" class="col-sm-2">Correo Electrónico</label>
                 <div class="col-sm-10">
-                   <input type="text" class="form-control" id="correo" placeholder="Tu ejemplo@empresa.com" v-model="postulante.Correo">
+                   <input type="text" class="form-control" id="correo" placeholder="Tu ejemplo@empresa.com" v-model="postulante.Correo" maxlength="30">
                 </div>
                 </div>
             </div>
@@ -225,7 +226,7 @@
                 <div class="row">
                   <label for="observacion" class="col-sm-2">Observación</label>
                 <div class="col-sm-10">
-                   <input type="text" class="form-control" id="observacion" placeholder="Observaciones" v-model="postulante.Observacion">
+                   <input type="text" class="form-control" id="observacion" placeholder="Observaciones" v-model="postulante.Observacion" maxlength="40">
                 </div>
                 </div>
             </div>
@@ -319,7 +320,7 @@ export default {
           this.postulanteupdate()
         } else {
           console.log('valor  ------------------------' + this.postulante.CodDocumento)
-          axios.post('http://localhost:8090/postulantes/postulante',
+          axios.post('/postulantes/postulante',
             {
               apellidopaterno: this.postulante.ApellidoPaterno,
               apellidomaterno: this.postulante.ApellidoMaterno,
@@ -334,7 +335,9 @@ export default {
               codpais: this.postulante.CodigoPais,
               direccion: this.postulante.Direccion,
               correo: this.postulante.Correo,
-              observacion: this.postulante.Observacion
+              observacion: this.postulante.Observacion,
+              telefono: this.postulante.Telefono,
+              ocupacion: this.postulante.Ocupacion
             })
             .then(response => {
               console.log(response.data)
@@ -347,7 +350,7 @@ export default {
       }
     },
     postulantegetxid () {
-      axios.get('http://localhost:8090/postulantes/getid/' + this.id)
+      axios.get('/postulantes/getid/' + this.id)
         .then(response => {
           console.log(response.data)
           this.postulante.id = response.data.id
@@ -365,13 +368,15 @@ export default {
           this.postulante.Direccion = response.data.direccion
           this.postulante.Correo = response.data.correo
           this.postulante.Observacion = response.data.observacion
+          this.postulante.Telefono = response.data.telefono
+          this.postulante.Ocupacion = response.data.ocupacion
         })
         .catch(error => {
           console.log(error)
         })
     },
     postulanteupdate () {
-      axios.put('http://localhost:8090/postulantes/update/' + this.id,
+      axios.put('/postulantes/update/' + this.id,
         { id: this.postulante.id,
           apellidopaterno: this.postulante.ApellidoPaterno,
           apellidomaterno: this.postulante.ApellidoMaterno,
@@ -384,9 +389,11 @@ export default {
           codgrado: this.postulante.CodGrado,
           codestadocivil: this.postulante.CodEstadoCivil,
           codpais: this.postulante.CodigoPais,
-          // direccion: this.postulante.Direccion,
+          direccion: this.postulante.Direccion,
           correo: this.postulante.Correo,
-          observacion: this.postulante.Observacion})
+          observacion: this.postulante.Observacion,
+          telefono: this.postulante.Telefono,
+          ocupacion: this.postulante.Ocupacion})
         .then(response => {
           console.log(response.data)
           this.$router.push('/postulante')
@@ -414,7 +421,7 @@ export default {
       }
     },
     calcularEdad: function (e) {
-      alert('ijij' + e.target.value)
+      // alert('ijij' + e.target.value)
       var fechaElegida = moment(e.target.value)
       var fechaHoy = moment()
       var d = fechaHoy.diff(fechaElegida, 'years')
@@ -424,7 +431,7 @@ export default {
   },
   mounted: function () {
     // Esta funcion inicializa los datos de los controles
-    axios.get('http://localhost:8090/tipo/allinfopostulante')
+    axios.get('/tipo/allinfopostulante')
       .then(response => {
         this.listaPais = response.data.paises
         this.listaGrado = response.data.grado
@@ -445,4 +452,6 @@ export default {
     }
   }
 }
+// nota
+// keyup.enter
 </script>

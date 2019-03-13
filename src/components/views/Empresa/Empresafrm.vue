@@ -154,7 +154,7 @@ export default ({
           console.log('llamando para actualizar..... x)')
           this.empresaupdate()
         } else {
-          axios.post('http://localhost:8090/empresa/create',
+          axios.post('/empresa/create',
             {id: this.empresa.codigo,
               ruc: this.empresa.ruc,
               razonsocial: this.empresa.razonsocial,
@@ -170,7 +170,7 @@ export default ({
                 console.log('actualizando datos ' + response)
                 let formData = new FormData()
                 formData.append('file', this.file)
-                axios.put('http://localhost:8090/empresa/logo2/' + response.data.id,
+                axios.put('/empresa/logo2/' + response.data.id,
                   formData,
                   {
                     headers: {
@@ -199,7 +199,7 @@ export default ({
       }
     },
     empresaupdate () {
-      axios.put('http://localhost:8090/empresa/update/' + this.empresa.codigo,
+      axios.put('/empresa/update/' + this.empresa.codigo,
         {id: this.empresa.codigo,
           ruc: this.empresa.ruc,
           razonsocial: this.empresa.razonsocial,
@@ -213,7 +213,7 @@ export default ({
             console.log('actualizando datos ' + response)
             let formData = new FormData()
             formData.append('file', this.file)
-            axios.put('http://localhost:8090/empresa/logo2/' + response.data.id,
+            axios.put('/empresa/logo2/' + response.data.id,
               formData,
               {
                 headers: {
@@ -257,7 +257,7 @@ export default ({
     }
   },
   mounted: function () {
-    axios.get('http://localhost:8090/empresa/getid/' + this.id)
+    axios.get('/empresa/getid/' + this.id)
       .then(response => {
         // console.log(response.data.grado)
         this.empresa.codigo = response.data.id

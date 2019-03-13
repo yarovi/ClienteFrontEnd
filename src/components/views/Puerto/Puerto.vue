@@ -166,7 +166,7 @@ export default ({
   methods: {
     getall (page) {
       // axios.get('http://localhost:8090/dispositivo/all')
-      axios.get('http://localhost:8090/dispositivo/findget?page=' + page)
+      axios.get('/dispositivo/findget?page=' + page)
         .then(response => {
           this.stdata = response.data.content
           this.pagination = {
@@ -191,7 +191,7 @@ export default ({
       this.getall(page)
     },
     getremovexid (id) {
-      axios.delete('http://localhost:8090/dispositivo/delete/' + id)
+      axios.delete('/dispositivo/delete/' + id)
         .then(response => {
           this.mostrarNotificacion('success', 'Operacion correctamente.!', 'Se elimino registro con id :' + id + '.')
           this.getall(0)
