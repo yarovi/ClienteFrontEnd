@@ -294,7 +294,7 @@
                </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-default pull-left" data-dismiss="modal" id="cerrarmodal">Cerrar</button>
-                <button type="button" class="btn btn-primary" id="elegirPostuante">Selección</button>
+                <!-- <button type="button" class="btn btn-primary" id="elegirPostuante">Selección</button> -->
               </div>
             </div>
           </div>
@@ -308,6 +308,7 @@ import axios from 'axios'
 export default {
   data: function () {
     return {
+      id: this.$route.params.id,
       examen: {
         Id: '',
         Codigopostulante: '',
@@ -374,7 +375,7 @@ export default {
         } else {
           axios.post('/examen/create',
             {
-              codpostulate: this.examen.Codigopostulante,
+              codpostulante: this.examen.Codigopostulante,
               codlicencia: this.examen.CodLicencia,
               codcategoria: this.examen.CodCategoria,
               codactitud: this.examen.CodActitud,
@@ -392,6 +393,12 @@ export default {
             })
         }
       }
+    },
+    examengetxid () {
+      axios.get('/examen/getid/' + this.id)
+      .then(response => {
+        console.log(response.data)
+      })
     },
     ejecutarValidacion: function () {
       this.$v.$touch()

@@ -251,7 +251,7 @@ export default ({
           console.log('Se elimino  :' + response.data)
         })
         .catch(response => {
-          console.log('hya problemas ' + response.data)
+          console.log('hay problemas ' + response.data)
         })
     },
     buscarPostulantexParametro: function () {

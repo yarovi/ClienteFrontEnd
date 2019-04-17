@@ -13,7 +13,7 @@
                     <div class="col-sm-2">
                       <select class="form-control" v-model="selector" id="selecttor">
                         <option value="nombre">Nombre y Apellidos</option>
-                        <option value="nrodocumento">Nro Documento</option>
+                        <!-- <option value="nrodocumento">Nro Documento</option> -->
                        </select>
                   </div>
                 </div>
@@ -54,7 +54,7 @@
               </div>
               <div class="row">
                 <div class="col-sm-12">
-                  <!-- <table
+                  <table
                     id="example2"
                     class="table table-bordered table-hover dataTable"
                     role="grid"
@@ -78,7 +78,7 @@
                           rowspan="1"
                           colspan="1"
                           aria-label="Browser: activate to sort column ascending"
-                        >Nombre</th>
+                        >Licencia</th>
                         <th
                           class="sorting"
                           tabindex="0"
@@ -86,7 +86,7 @@
                           rowspan="1"
                           colspan="1"
                           aria-label="Platform(s): activate to sort column ascending"
-                        >A.Paterno</th>
+                        >Categoria</th>
                         <th
                           class="sorting"
                           tabindex="0"
@@ -94,7 +94,7 @@
                           rowspan="1"
                           colspan="1"
                           aria-label="Engine version: activate to sort column ascending"
-                        >A.Materno</th>
+                        >Actitud</th>
                         <th
                           class="sorting"
                           tabindex="0"
@@ -102,7 +102,7 @@
                           rowspan="1"
                           colspan="1"
                           aria-label="CSS grade: activate to sort column ascending"
-                        >NroDocumento</th>
+                        >Comportamiento</th>
                         <th
                           class="sorting"
                           tabindex="0"
@@ -110,7 +110,15 @@
                           rowspan="1"
                           colspan="1"
                           aria-label="CSS grade: activate to sort column ascending"
-                        >Direccion</th>
+                        >Sangre</th>
+                        <th
+                          class="sorting"
+                          tabindex="0"
+                          aria-controls="example2"
+                          rowspan="1"
+                          colspan="1"
+                          aria-label="CSS grade: activate to sort column ascending"
+                        >Nombres</th>
                         <th
                           class="sorting"
                           tabindex="0"
@@ -124,23 +132,25 @@
                     <tbody>
                       <tr role="row" class="odd" v-for="(item,index) in stdata" :key="index">
                         <td class="sorting_1">{{item.id}}</td>
-                        <td>{{item.nombre}}</td>
-                        <td>{{item.apellidopaterno}}</td>
-                        <td>{{item.apellidomaterno}}</td>
-                        <td>{{item.nrodocumento}}</td>
-                        <td>{{item.direccion}}</td>
+                        <!-- <td>{{item.id}}</td> -->
+                        <td>{{item.descripcionLicencia}}</td>
+                        <td>{{item.descripcionCategoria}}</td>
+                        <td>{{item.descripcionActitud}}</td>
+                        <td>{{item.descripcionComportamiento}}</td>
+                        <td>{{item.descripcionSangre}}</td>
+                        <td>{{item.nombrePostulante}}</td>
                         <td>
-                          <router-link v-bind:to="'/crearpostulante/'+item.id" class="far fa-edit">
+                          <router-link v-bind:to="'/crearexamen/'+item.id" class="far fa-edit">
                           </router-link>
                           <a class="far fa-trash-alt" href="#" v-on:click="getremovexid(item.id)">
                           </a>
                         </td>
                       </tr>
                     </tbody>
-                  </table> -->
+                  </table>
                 </div>
               </div>
-              <!-- <div class="row">
+              <div class="row">
                 <div class="col-sm-5">
                   <div
                     class="dataTables_info"
@@ -167,7 +177,7 @@
                     </ul>
                   </nav>
                 </div>
-              </div> -->
+              </div>
             </div>
           </div>
         </div>
@@ -176,16 +186,85 @@
   </section>
 </template>
 <script>
+import axios from 'axios'
 export default {
   data: function () {
     return {
+      stdata: [],
+      currentPage: 4,
+      pagination: [],
+      offset: 3,
       selector: '',
       txtbuscar: ''
     }
   },
   methods: {
-    buscarExamenxParametro () {
+    getall (page) {
+      let params = {tipo: this.selector, valor: this.txtbuscar, page: page}
+      axios.get('/examen/findget', {params})
+        .then(response => {
+          this.stdata = response.data.content
+          this.pagination = {
+            totalPages: response.data.totalPages,
+            totalElements: response.data.totalElements,
+            last: response.data.last,
+            numberOfElements: response.data.numberOfElements,
+            first: response.data.first,
+            sort: response.data.sort,
+            size: response.data.size,
+            number: response.data.number
+          }
+          console.log(response.data.content)
+          console.log(this.pagination)
+        })
+        .catch(error => {
+          console.log(error)
+        })
+    },
+    changePage: function (page) {
+      this.pagination.number = page
+      this.getall(page)
+    },
+    getremovexid (id) {
+      axios.delete('/examen/delete/' + id)
+        .then(response => {
+          this.getall(0)
+          console.log('Se elimino  :' + response.data)
+        })
+        .catch(response => {
+          console.log('hay problemas ' + response.data)
+        })
+    },
+    buscarExamenxParametro: function () {
+      this.getall(0)
     }
+  },
+  computed: {
+    isActived: function () {
+      return this.pagination.number
+    },
+    pagesNumber: function () {
+      if (this.pagination.size > this.pagination.numberOfElements) {
+        return []
+      }
+      var from = this.pagination.number - this.offset
+      if (from < 1) {
+        from = 1
+      }
+      var to = from + (this.offset * this.offset)
+      if (to >= this.pagination.totalPages) {
+        to = this.pagination.totalPages
+      }
+      var pagesArray = []
+      while (from <= to) {
+        pagesArray.push(from)
+        from++
+      }
+      return pagesArray
+    }
+  },
+  created: function () {
+    this.getall(0)
   }
 }
 </script>
